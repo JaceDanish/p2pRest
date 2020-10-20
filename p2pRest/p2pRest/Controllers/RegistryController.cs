@@ -24,29 +24,18 @@ namespace p2pRest.Controllers
             return _mgRegistry.GetAll(filename);
         }
 
-        // GET api/<RegistryController>/5
-        [HttpGet("{id}")]
-        public string Get(int id)
-        {
-            return "value";
-        }
-
         // POST api/<RegistryController>
-        [HttpPost]
-        public void Post([FromBody] string value)
+        [HttpPost("{filename}")]
+        public int Post([FromBody] String jSon, String filename)
         {
+            return _mgRegistry.Register(filename, jSon);
         }
 
         // PUT api/<RegistryController>/5
-        [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
+        [HttpPut("{filename}")]
+        public int Put(String filename, [FromBody] string jSon)
         {
-        }
-
-        // DELETE api/<RegistryController>/5
-        [HttpDelete("{id}")]
-        public void Delete(int id)
-        {
+            return _mgRegistry.Deregister(filename, jSon);
         }
     }
 }
