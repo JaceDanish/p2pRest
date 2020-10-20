@@ -10,7 +10,7 @@ using p2pRest.Model;
 
 namespace p2pRest.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/")]
     [ApiController]
     public class RegistryController : ControllerBase
     {
@@ -25,17 +25,18 @@ namespace p2pRest.Controllers
         }
 
         // POST api/<RegistryController>
-        [HttpPost("{filename}")]
-        public int Post([FromBody] String jSon, String filename)
+        [HttpPost]
+        [Route("{filename}")]
+        public int Post(String filename, [FromBody] FileEndPoint fep)
         {
-            return _mgRegistry.Register(filename, jSon);
+            return _mgRegistry.Register(filename, fep);
         }
 
         // PUT api/<RegistryController>/5
         [HttpPut("{filename}")]
-        public int Put(String filename, [FromBody] string jSon)
+        public int Put(String filename, [FromBody] FileEndPoint fep)
         {
-            return _mgRegistry.Deregister(filename, jSon);
+            return _mgRegistry.Deregister(filename, fep);
         }
     }
 }

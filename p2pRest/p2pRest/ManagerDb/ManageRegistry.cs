@@ -3,14 +3,15 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Xml;
-using Newtonsoft.Json;
+using System.Text.Json;
+//using Newtonsoft.Json;
 using p2pRest.Model;
 
 namespace p2pRest.ManagerDb
 {
     public class ManageRegistry
     {
-        private Dictionary<String, FileEndPoint> _registryDictionary = new Dictionary<String, FileEndPoint>();
+        private static Dictionary<String, FileEndPoint> _registryDictionary = new Dictionary<String, FileEndPoint>();
 
         public string GetAll(string filename)
         {
@@ -24,12 +25,12 @@ namespace p2pRest.ManagerDb
                 }
             }
 
-            return JsonConvert.SerializeObject(newList);
+            return JsonSerializer.Serialize(newList);
         }
 
-        public int Register(String filename, String jSon)
+        public int Register(String filename, FileEndPoint fep)
         {
-            FileEndPoint fep = (FileEndPoint)JsonConvert.DeserializeObject(jSon);
+            //FileEndPoint fep = JsonSerializer.Deserialize<FileEndPoint>(jSon);
             if (!(fep is FileEndPoint))
             {
                 return -1;
@@ -44,9 +45,9 @@ namespace p2pRest.ManagerDb
             return 1;
         }
 
-        public int Deregister(String filename, String jSon)
+        public int Deregister(String filename, FileEndPoint fep)
         {
-            FileEndPoint fep = (FileEndPoint)JsonConvert.DeserializeObject(jSon);
+            //FileEndPoint fep = JsonSerializer.Deserialize<FileEndPoint>(jSon);
             if (!(fep is FileEndPoint))
             {
                 return -1;
