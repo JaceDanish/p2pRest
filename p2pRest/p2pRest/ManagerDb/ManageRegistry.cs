@@ -11,7 +11,7 @@ namespace p2pRest.ManagerDb
 {
     public class ManageRegistry
     {
-        private static Dictionary<String, FileEndPoint> _registryDictionary = new Dictionary<String, FileEndPoint>();
+        private static Dictionary<String, List<FileEndPoint>> _registryDictionary = new Dictionary<String, List<FileEndPoint>>();
 
         public string GetAll(string filename)
         {
@@ -21,7 +21,10 @@ namespace p2pRest.ManagerDb
             {
                 if (reg.Key.Equals(filename))
                 {
-                    newList.Add(reg.Value);
+                    foreach (FileEndPoint fep in reg.Value)
+                    {
+                        newList.Add(fep);
+                    }
                 }
             }
 
@@ -38,10 +41,23 @@ namespace p2pRest.ManagerDb
 
             if (_registryDictionary.ContainsKey(filename))
             {
-                return 0;
+                List<FileEndPoint> temp;
+                _registryDictionary.TryGetValue(filename, out temp);
+                foreach (FileEndPoint f in temp)
+                {
+                    if (f.Ipaddress.Equals(fep.Ipaddress))
+                    {
+                        return 0;
+                    }
+                }
+                temp.Add(fep);
+                return 1;
             }
 
-            _registryDictionary.Add(filename, fep);
+            _registryDictionary.Add(filename, new List<FileEndPoint>()
+            {
+                fep
+            });
             return 1;
         }
 
@@ -58,7 +74,24 @@ namespace p2pRest.ManagerDb
                 return 0;
             }
 
-            _registryDictionary.Remove(filename);
+            //_registryDictionary.Remove(filename);
+            List<FileEndPoint> temp;
+            _registryDictionary.TryGetValue(filename, out temp);
+            if (temp.Count == 1)
+            {
+                _registryDictionary.Remove(filename);
+            }
+            else
+            {
+                foreach (FileEndPoint f in temp)
+                {
+                    if (f.Ipaddress.Equals(fep.Ipaddress))
+                    {
+                        temp.Remove(f);
+                        
+                    }
+                }
+            }
             return 1;
         }
     }
