@@ -88,7 +88,7 @@ namespace p2pRest.ManagerDb
                     if (f.Ipaddress.Equals(fep.Ipaddress))
                     {
                         temp.Remove(f);
-                        
+                        return 1;
                     }
                 }
             }
